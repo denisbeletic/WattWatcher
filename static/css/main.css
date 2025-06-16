@@ -1,0 +1,21 @@
+body {
+    padding-top: 56px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif, Tahoma, Geneva, Verdana, sans-serif
+  }
+
+  .nav-button {
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+  }
+
+  .nav-button:hover {
+    color: white;
+    background-color: #FF6600;
+  }
+
+  #graf {
+    width: 200px !important;
+    height: 200px !important;
+  }
