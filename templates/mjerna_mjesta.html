@@ -4,6 +4,135 @@
 
 {% block body %}
 
-<h2>Mjerna mjesta</h2>
+<div class="container mt-5"  id="list">
+    <div class="d-flex justify-content-between align-items-center">        
+        <h1 class="mb-0">Mjerna mjesta</h2>
+        <div>
+            <button type="button" class="btn btn-success" id="hide_list_c"><i class="bi bi-file-earmark-plus"></i>  -  Dodaj MM</button>
+            <button type="button" class="btn btn-secondary" id="hide_list_e"><i class="bi-file-text"></i>  -  Uredi MM</button>
+            <button type="button" class="btn btn-danger" id="hide_list_d"><i class="bi-trash"></i>  -  Ukloni MM</button>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <table class="table table-striped table-bordered table-hover text-center">
+            <tr class="table-primary">
+                <th>ID</th>
+                <th>Broj obračunskog mjernog mjesta</th>
+                <th>Vlasnik</th>
+                <th>Adresa</th>
+                <th>Poštanski broj</th>
+            </tr>
+            {% for mm in pokazi_mm %}
+                <tr>
+                    <td>{{ mm.id }}</td>
+                    <td>{{ mm.broj_omm }}</td>
+                    <td>{{ mm.vlasnik }}</td>
+                    <td>{{ mm.adresa }}</td>
+                    <td>{{ mm.postanski_broj }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<div id="form_c" style="display: none;">
+    <form action="{{ url_for('mjerna_mjesta') }}" method="POST" class="mt-5 p-4 border rounded" style="max-width: 700px; margin:auto; background-color: #f8f9fa;">
+        <h2 class="mb-4">Dodaj novo mjerno mjesto</h2>
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Broj obračunskog mjernog mjesta</label>
+                <input type="number" class="form-control" id="broj_omm" name="broj_omm" placeholder="Unesite broj" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Vlasnik</label>
+                <input type="text" class="form-control" id="vlasnik" name="vlasnik" placeholder="Ime vlasnika" required>
+            </div>
+        </div>
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Adresa</label>
+                <input type="text" class="form-control" id="adresa" name="adresa" placeholder="Adresa" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Poštanski broj</label>
+                <input type="number" class="form-control" id="postanski_broj" name="postanski_broj" placeholder="Poštanski broj" required>
+            </div>
+        </div>
+        <br>
+        <div class="d-flex justify-content-end gap-3">
+            <button type="submit" class="btn btn-success"><i class="bi bi-file-earmark-plus me-1"></i> Kreiraj</button>
+            <button type="button" class="btn btn-secondary" id="hide_form_c">Odustani</button>
+        </div>
+    </form>
+</div>
+
+<div id="form_d" style="display: none;">
+    <form action="{{ url_for('delete') }}" method="POST" class="mt-5 p-4 border rounded" style="max-width:600px; margin:auto; background-color: #f8f9fa;">
+        <h2 class="mb-4">Ukloni postojeće mjerno mjesto</h2>
+        <label class="form-label">Odaberite MM koje želite ukloniti:</label>
+        <select name="uklanjanje_mm_odabir" id="uklanjanje_mm_odabir" class="form-select mb-2" required>
+            <option value="" selected>Odaberite...</option>
+            {% for mm in pokazi_mm %}
+            <option value="{{ mm.id }}">
+                {{ mm.broj_omm }} - {{ mm.vlasnik }} - {{ mm.adresa }}
+            </option>
+            {% endfor %}
+        </select>
+        <div class="d-flex justify-content-end gap-3 mt-3">
+            <button type="submit" class="btn btn-danger"><i class="bi-trash"></i> Obriši</button>
+            <button type="button" class="btn btn-secondary" id="hide_form_d">Odustani</button>
+        </div>
+    </form>
+</div>
+
+<div id="form_e" style="display: none;">
+    <form class="mt-5 p-4 border rounded" style="max-width:700px; margin:auto; background-color: #f8f9fa;">
+        <h2 class="mb-4">Uredi postojeće mjerno mjesto</h2>
+        <label class="form-label">Odaberite MM koje želite urediti:</label>
+        <select name="uredivanje_mm_odabir" id="uredivanje_mm_odabir" class="form-select mb-2" required>
+            <option value="" selected>Odaberite...</option>
+            {% for mm in pokazi_mm %}
+            <option value="{{ mm.id }}" data-broj_omm="{{ mm.broj_omm }}" data-vlasnik="{{ mm.vlasnik }}" data-adresa="{{ mm.adresa }}" data-postanski_broj="{{ mm.postanski_broj }}">
+                {{ mm.broj_omm }} - {{ mm.vlasnik }} - {{ mm.adresa }} - {{ mm.postanski_broj }}
+            </option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+
+<div id="edit_form" style="display: none;">
+    <form action="{{ url_for('edit') }}" method="POST" class="mt-4 p-4 border rounded" style="max-width: 700px; margin:auto; background-color: #f8f9fa;" method="POST">
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Broj obračunskog mjernog mjesta</label>
+                <input type="number" class="form-control" id="edit_broj_omm" name="edit_broj_omm" placeholder="Unesite broj" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Vlasnik</label>
+                <input type="text" class="form-control" id="edit_vlasnik" name="edit_vlasnik" placeholder="Ime vlasnika" required>
+            </div>
+        </div>
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Adresa</label>
+                <input type="text" class="form-control" id="edit_adresa" name="edit_adresa" placeholder="Adresa" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Poštanski broj</label>
+                <input type="number" class="form-control" id="edit_postanski_broj" name="edit_postanski_broj" placeholder="Poštanski broj" required>
+            </div>
+        </div>
+        <br>
+        <div class="d-flex justify-content-end gap-3 mt-3">
+            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil"></i> Uredi</button>
+            <button type="button" class="btn btn-secondary" id="hide_form_e">Odustani</button>
+        </div>
+        <input type="hidden" id="edit_id" name="edit_id">
+    </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/mjerna_mjesta.js') }}"></script>
+
 
 {% endblock %}

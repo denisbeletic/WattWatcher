@@ -21,8 +21,12 @@
   <div class="mb-4">
     <p class="mb-1">Cijena po kWh (VT): <strong>0.09 €</strong></p>
     <p class="mb-1">Cijena po kWh (NT): <strong>0.04 €</strong></p>
+    <br>
+    <p class="mb-1">Cijena potrošnje VT: <strong><span id="potrosnja_VT">0.00 €</span></strong></p>
+    <p class="mb-1">Cijena potrošnje NT: <strong><span id="potrosnja_NT">0.00 €</span></strong></p>
     <p class="mb-1">Distribucija: <strong><span id="distribucija">0.00 €</span></strong></p>
     <p class="mb-1">Prijenos: <strong><span id="prijenos">0.00 €</span></strong></p>
+    <br>
     <p class="mb-1">Porez: <strong>10%</strong></p>
   </div>
 
@@ -35,9 +39,7 @@
   <canvas id="graf"></canvas>
 </div>
 
-
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br>    
-
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 <script src="{{ url_for('static', filename='js/kalkulator.js') }}"></script>
 

@@ -1,7 +1,42 @@
 {% extends 'base.html' %}
 
+{% block title %}Naslovna{% endblock %}
+
 {% block body %}
 
-<h2>Dobro došli na WattWatcher!</h2>
+<div class="container mt-5">
+    <div class="text-center">
+        <h1 class="mb-4 display-4 fw-bold">Dobro došli na <span class="text-primary">WattWatcher</span>!</h1>
+        <p class="lead mb-5">
+            Pratite, analizirajte i upravljajte svojom potrošnjom električne energije na jednostavan način.<br>
+            Iskoristite kalkulator, pregled mjernih mjesta i još mnogo toga!
+        </p>
+        <div class="d-flex justify-content-center gap-4 mb-5">
+            <a href="{{ url_for('mjerna_mjesta') }}" class="btn btn-outline-success btn-lg">
+                <i class="bi bi-list-ul"></i> Mjerna mjesta
+            </a>
+            <a href="{{ url_for('kalkulator') }}" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-calculator"></i> Kalkulator potrošnje
+            </a>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-4 text-center">
+            <i class="bi bi-graph-up-arrow display-4 text-success"></i>
+            <h4 class="mt-3">Analiza potrošnje</h4>
+            <p>Vizualizirajte i analizirajte svoju potrošnju kroz grafičke prikaze.</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <i class="bi bi-lightning-charge-fill display-4 text-warning"></i>
+            <h4 class="mt-3">Jednostavno upravljanje</h4>
+            <p>Dodajte, uredite ili uklonite mjerna mjesta brzo i jednostavno.</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <i class="bi bi-calculator-fill display-4 text-primary"></i>
+            <h4 class="mt-3">Pametan kalkulator</h4>
+            <p>Izračunajte troškove električne energije prema stvarnoj potrošnji.</p>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
