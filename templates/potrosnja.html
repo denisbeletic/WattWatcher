@@ -4,8 +4,192 @@
 
 {% block body %}
 
-<div class="container mt-5">
-    <h1>Potrošnja</h1>
+
+<div id="potrosnje">
+    <div class="container mt-5">
+        <h1 class="mb-2 text-center">Potrošnja</h1>
+    </div>
+    
+    <form action="{{ url_for('potrosnja') }}" method="POST" class="mt-5 p-4 border rounded" style="max-width: 700px; margin:auto; background-color: #f8f9fa;">
+        <label class="form-label">Mjerno mjesto:</label>
+        <select class="form-select mb-4" id="prikaz_potrosnje_mm_odabir" name="id_mm" required>
+            <option value="" selected>Odaberite mjerno mjesto...</option>
+            {% for mm in pokazi_mm %}
+            <option value="{{ mm.id }}">
+                {{ mm.id }} - {{ mm.broj_omm }} - {{ mm.vlasnik }} - {{ mm.adresa }}
+            </option>
+            {% endfor %}
+        </select>
+        <div id="unos_ocitanja_wrapper" style="display: block">
+            <div class="mb-3">
+                <label class="form-label">Potrošnja VT (kWh):</label>
+                <input type="number" step="any" class="form-control" id="val_vt" name="val_vt" placeholder="Unesite potrošnju VT" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Potrošnja NT (kWh):</label>
+                <input type="number" step="any" class="form-control" id="val_nt" name="val_nt" placeholder="Unesite potrošnju NT" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Mjesec:</label>
+                <select class="form-select" id="mjesec" name="mjesec" required>
+                    <option value="" selected>Odaberite mjesec...</option>
+                    <option value="1">1. - Siječanj</option>
+                    <option value="2">2. - Veljača</option>
+                    <option value="3">3. - Ožujak</option>
+                    <option value="4">4. - Travanj</option>
+                    <option value="5">5. - Svibanj</option>
+                    <option value="6">6. - Lipanj</option>
+                    <option value="7">7. - Srpanj</option>
+                    <option value="8">8. - Kolovoz</option>
+                    <option value="9">9. - Rujan</option>
+                    <option value="10">10. - Listopad</option>
+                    <option value="11">11. - Studeni</option>
+                    <option value="12">12. - Prosinac</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Godina:</label>
+                <input type="number" class="form-control" id="godina" name="godina" placeholder="Unesite godinu" required>
+            </div>
+            <br>
+            <div class="d-flex justify-content-end gap-3">
+                <button type="submit" class="btn btn-success"><i class="bi bi-file-earmark-plus"></i> - Unesi potrošnju</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="container mt-5"  id="">
+        <div class="mt-5">
+            <table class="table table-bordered table-hover text-center">
+                <tr class="table-primary">
+                    <th>ID</th>
+                    <th>Broj obračunskog mjernog mjesta</th>
+                    <th>Vlasnik</th>
+                    <th>Adresa</th>
+                    <th>Poštanski broj</th>
+                </tr>
+                {% for mm in pokazi_mm %}
+                    <tr>
+                        <td style="background-color: #20447d; color: white;"><b>{{ mm.id }}</b></td>
+                        <td>{{ mm.broj_omm }}</td>
+                        <td>{{ mm.vlasnik }}</td>
+                        <td>{{ mm.adresa }}</td>
+                        <td>{{ mm.postanski_broj }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    
+    <div class="container mt-5"  id="">
+        <div class="mt-5">
+            <table class="table table-bordered table-hover text-center">
+                <tr class="table-primary">
+                    <th>ID</th>
+                    <th style="max-width: 35px;">Mjesec</th>
+                    <th style="max-width: 35px;">Godina</th>
+                    <th>Potrošeno po VT</th>
+                    <th>Potrošeno po NT</th>
+                    <th style="max-width: 75px;">ID mjernog mjesta</th>
+                </tr>
+                {% for ocitanje in pokazi_ocitanja %}
+                    <tr>
+                        <td>{{ ocitanje.id }}</td>
+                        <td>{{ ocitanje.mjesec }}</td>
+                        <td>{{ ocitanje.godina }}</td>
+                        <td>{{ ocitanje.val_vt }}</td>
+                        <td>{{ ocitanje.val_nt }}</td>
+                        <td style="background-color: #20447d; color: white;"><b>{{ ocitanje.id_mm }}</b></td>
+                    </tr>
+                 {% endfor %}
+            </table>
+        </div>
+        <br>
+        <div class="d-flex justify-content-end gap-3">
+            <button type="button" class="btn btn-warning" id="hide_potrosnje_e"><i class="bi-file-text"></i> - Uredi potrošnju</button>
+            <button type="button" class="btn btn-danger"  id="hide_potrosnje_d"><i class="bi-trash"></i> - Ukloni potrošnju</button>
+        </div>
+    </div>
 </div>
+
+<div id="form_e_potrosnje" style="display: none;">
+    <form class="mt-5 p-4 border rounded" style="max-width:700px; margin:auto; background-color: #f8f9fa;">
+        <h2 class="mb-4">Uredi postojeću potrošnju</h2>
+        <label class="form-label">Odaberite potrošnju koju želite urediti:</label>
+        <select name="uredivanje_ocitanja_odabir" id="uredivanje_ocitanja_odabir" class="form-select mb-2" required>
+            <option value="" selected>Odaberite...</option>   
+            {% for ocitanje in pokazi_ocitanja %}
+                <option value="{{ ocitanje.id }}" data-mjesec="{{ ocitanje.mjesec }}" data-val_vt="{{ ocitanje.val_vt }}" data-val_nt="{{ ocitanje.val_nt }}">
+                    ID: {{ ocitanje.id }}, mjesec: {{ ocitanje.mjesec }}., godina: {{ocitanje.godina }}, VT: {{ ocitanje.val_vt }}, NT: {{ ocitanje.val_nt }}, ID MM-a: {{ ocitanje.id_mm }}
+            {% endfor %}
+        </select>
+    </form>
+
+    <div id="edit_form_potrosnja" style="display: block;">
+        <form action="{{ url_for('edit_potrosnja') }}" method="POST" class="mt-4 p-4 border rounded" style="max-width: 700px; margin:auto; background-color: #f8f9fa;">
+            <div class="">
+                <div class="mb-3">
+                    <label class="form-label">Potrošnja VT (kWh):</label>
+                    <input type="number" step="any" class="form-control" id="edit_val_vt" name="edit_val_vt" placeholder="Unesite potrošnju VT" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Potrošnja NT (kWh):</label>
+                    <input type="number" step="any" class="form-control" id="edit_val_nt" name="edit_val_nt" placeholder="Unesite potrošnju NT" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Mjesec:</label>
+                    <select class="form-select" id="edit_mjesec" name="edit_mjesec" required>
+                        <option value="" selected>Odaberite mjesec...</option>
+                        <option value="1">1. - Siječanj</option>
+                        <option value="2">2. - Veljača</option>
+                        <option value="3">3. - Ožujak</option>
+                        <option value="4">4. - Travanj</option>
+                        <option value="5">5. - Svibanj</option>
+                        <option value="6">6. - Lipanj</option>
+                        <option value="7">7. - Srpanj</option>
+                        <option value="8">8. - Kolovoz</option>
+                        <option value="9">9. - Rujan</option>
+                        <option value="10">10. - Listopad</option>
+                        <option value="11">11. - Studeni</option>
+                        <option value="12">12. - Prosinac</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Godina:</label>
+                <input type="number" class="form-control" id="edit_godina" name="edit_godina" placeholder="Unesite godinu" required>
+            </div>
+            <br>
+            <div class="d-flex justify-content-end gap-3 mt-3">
+                <button type="submit" class="btn btn-warning" id="hide_potrosnje_e"><i class="bi bi-pencil"></i> Uredi</button>
+                <button type="button" class="btn btn-secondary" id="hide_form_e_potrosnje">Odustani</button>
+            </div>
+            <input type="hidden" id="edit_id_potrosnja" name="edit_id_potrosnja">
+        </form>
+    </div>
+</div>
+
+<div id="form_d_potrosnje" style="display: none;">
+    <form action="{{ url_for('delete_potrosnja') }}" method="POST" class="mt-5 p-4 border rounded" style="max-width:600px; margin:auto; background-color: #f8f9fa;">
+        <h2 class="mb-4">Ukloni potrošnju</h2>
+        <label class="form-label">Odaberite potrošnju koje želite ukloniti:</label>
+        <select name="uklanjanje_potrošnje_odabir" id="uklanjanje_potrošnje_odabir" class="form-select mb-2" required>
+            <option value="" selected>Odaberite...</option>
+            {% for ocitanje in pokazi_ocitanja %}
+                <option value="{{ ocitanje.id }}">
+                    ID: {{ ocitanje.id }}, mjesec: {{ ocitanje.mjesec }}., godina: {{ocitanje.godina }}, VT: {{ ocitanje.val_vt }}, NT: {{ ocitanje.val_nt }}, ID MM-a: {{ ocitanje.id_mm }}
+                </option>
+            {% endfor %}
+        </select>
+        <div class="d-flex justify-content-end gap-3 mt-3">
+            <button type="submit" class="btn btn-danger"><i class="bi-trash"></i> Obriši</button>
+            <button type="button" class="btn btn-secondary" id="hide_form_d_potrosnje">Odustani</button>
+        </div>
+    </form>
+</div>
+
+<br><br><br>
+
+<script src="{{ url_for('static', filename='js/potrosnja.js') }}"></script>
 
 {% endblock %}

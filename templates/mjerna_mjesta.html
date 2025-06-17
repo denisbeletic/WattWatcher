@@ -9,7 +9,7 @@
         <h1 class="mb-0">Mjerna mjesta</h2>
         <div>
             <button type="button" class="btn btn-success" id="hide_list_c"><i class="bi bi-file-earmark-plus"></i>  -  Dodaj MM</button>
-            <button type="button" class="btn btn-secondary" id="hide_list_e"><i class="bi-file-text"></i>  -  Uredi MM</button>
+            <button type="button" class="btn btn-warning" id="hide_list_e"><i class="bi-file-text"></i>  -  Uredi MM</button>
             <button type="button" class="btn btn-danger" id="hide_list_d"><i class="bi-trash"></i>  -  Ukloni MM</button>
         </div>
     </div>
@@ -68,7 +68,7 @@
 </div>
 
 <div id="form_d" style="display: none;">
-    <form action="{{ url_for('delete') }}" method="POST" class="mt-5 p-4 border rounded" style="max-width:600px; margin:auto; background-color: #f8f9fa;">
+    <form action="{{ url_for('delete_mm') }}" method="POST" class="mt-5 p-4 border rounded" style="max-width:600px; margin:auto; background-color: #f8f9fa;">
         <h2 class="mb-4">Ukloni postojeće mjerno mjesto</h2>
         <label class="form-label">Odaberite MM koje želite ukloniti:</label>
         <select name="uklanjanje_mm_odabir" id="uklanjanje_mm_odabir" class="form-select mb-2" required>
@@ -102,7 +102,7 @@
 </div>
 
 <div id="edit_form" style="display: none;">
-    <form action="{{ url_for('edit') }}" method="POST" class="mt-4 p-4 border rounded" style="max-width: 700px; margin:auto; background-color: #f8f9fa;" method="POST">
+    <form action="{{ url_for('edit_mm') }}" method="POST" class="mt-4 p-4 border rounded" style="max-width: 700px; margin:auto; background-color: #f8f9fa;">
         <div class="row g-3 mb-3">
             <div class="col-md-6">
                 <label class="form-label">Broj obračunskog mjernog mjesta</label>

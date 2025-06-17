@@ -62,6 +62,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (edit_dropdown && edit_form) {
         edit_dropdown.addEventListener('change', function() {
             if (edit_dropdown.value) {
+                let selected = edit_dropdown.options[edit_dropdown.selectedIndex];
+                document.getElementById('edit_id').value = selected.value;
+                document.getElementById('edit_broj_omm').value = selected.getAttribute('data-broj_omm');
+                document.getElementById('edit_vlasnik').value = selected.getAttribute('data-vlasnik');
+                document.getElementById('edit_adresa').value = selected.getAttribute('data-adresa');
+                document.getElementById('edit_postanski_broj').value = selected.getAttribute('data-postanski_broj');
                 edit_id.value = edit_dropdown.value;
                 edit_form.style.display = 'block';
             } else {

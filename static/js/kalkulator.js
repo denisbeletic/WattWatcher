@@ -56,12 +56,12 @@ function dohvati() {
     graf.data.datasets[0].data = [postotak, 100 - postotak];
     graf.update();
 
-    document.getElementById("potrosnja_VT").innerHTML = `<strong>${(VT_potrosnja * VT_cijena).toFixed(2)} €</strong>`;
-    document.getElementById("potrosnja_NT").innerHTML = `<strong>${(NT_potrosnja * NT_cijena).toFixed(2)} €</strong>`;
+    document.getElementById("potrosnja_VT").innerHTML = `<strong>${(VT_potrosnja * VT_cijena).toFixed(2)}€</strong>`;
+    document.getElementById("potrosnja_NT").innerHTML = `<strong>${(NT_potrosnja * NT_cijena).toFixed(2)}€</strong>`;
 
-    document.getElementById("distribucija").innerHTML = `<strong>${distribucija.toFixed(2)} €</strong>`;
-    document.getElementById("prijenos").innerHTML = `<strong>${prijenos.toFixed(2)} €</strong>`;
-    document.getElementById("ukupno").innerHTML = `<strong>${ukupno.toFixed(2)} €</strong>`;
+    document.getElementById("distribucija").innerHTML = `<strong>${distribucija.toFixed(2)}€</strong>`;
+    document.getElementById("prijenos").innerHTML = `<strong>${prijenos.toFixed(2)}€</strong>`;
+    document.getElementById("ukupno").innerHTML = `<strong>${ukupno.toFixed(2)}€</strong>`;
     document.getElementById("postotak_potrosnje").innerHTML = `<strong>${postotak}</strong>%`;
 }
 
