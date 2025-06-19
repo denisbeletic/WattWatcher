@@ -5,38 +5,38 @@
 {% block body %}
 
 <div class="container mt-5">
-  <h1 class="mb-4 text-center">Kalkulator potrošnje električne energije</h1>
+    <h1 class="mb-4 text-center">Kalkulator potrošnje električne energije</h1>
 
-  <form id="calculator-form" class="mb-4">
-    <div class="mb-3">
-      <label for="VT" class="form-label">Unesite potrošnju - VT (kWh):</label>
-      <input type="number" class="form-control" id="VT" min="0" step="any" />
+    <form id="calculator-form" class="mb-4">
+        <div class="mb-3">
+            <label for="VT" class="form-label">Unesite potrošnju - VT (kWh):</label>
+            <input type="number" class="form-control" id="VT" min="0" step="any" />
+        </div>
+        <div class="mb-3">
+            <label for="NT" class="form-label">Unesite potrošnju - NT (kWh):</label>
+            <input type="number" class="form-control" id="NT" min="0" step="any" />
+        </div>
+    </form>
+
+    <div class="mb-4">
+        <p class="mb-1">Cijena po kWh (VT): <strong>0.09€</strong></p>
+        <p class="mb-1">Cijena po kWh (NT): <strong>0.04€</strong></p>
+        <br>
+        <p class="mb-1">Cijena potrošnje VT: <strong><span id="potrosnja_VT">0.00€</span></strong></p>
+        <p class="mb-1">Cijena potrošnje NT: <strong><span id="potrosnja_NT">0.00€</span></strong></p>
+        <p class="mb-1">Distribucija: <strong><span id="distribucija">0.00€</span></strong></p>
+        <p class="mb-1">Prijenos: <strong><span id="prijenos">0.00€</span></strong></p>
+        <br>
+        <p class="mb-1">Porez: <strong>10%</strong></p>
     </div>
-    <div class="mb-3">
-      <label for="NT" class="form-label">Unesite potrošnju - NT (kWh):</label>
-      <input type="number" class="form-control" id="NT" min="0" step="any" />
-    </div>
-  </form>
 
-  <div class="mb-4">
-    <p class="mb-1">Cijena po kWh (VT): <strong>0.09€</strong></p>
-    <p class="mb-1">Cijena po kWh (NT): <strong>0.04€</strong></p>
-    <br>
-    <p class="mb-1">Cijena potrošnje VT: <strong><span id="potrosnja_VT">0.00€</span></strong></p>
-    <p class="mb-1">Cijena potrošnje NT: <strong><span id="potrosnja_NT">0.00€</span></strong></p>
-    <p class="mb-1">Distribucija: <strong><span id="distribucija">0.00€</span></strong></p>
-    <p class="mb-1">Prijenos: <strong><span id="prijenos">0.00€</span></strong></p>
-    <br>
-    <p class="mb-1">Porez: <strong>10%</strong></p>
-  </div>
-
-  <h3>Ukupno: <span id="ukupno">0.00€</span></h3>
-  <p class="text-center fs-5">Postotak potrošnje - VT/ukupno: <span id="postotak_potrosnje">0%</span></p>
+    <h3>Ukupno: <span id="ukupno">0.00€</span></h3>
+    <p class="text-center fs-5">Postotak potrošnje - VT/ukupno: <span id="postotak_potrosnje">0%</span></p>
 </div>
 
 
 <div class="d-flex justify-content-center">
-  <canvas id="graf"></canvas>
+    <canvas id="graf"></canvas>
 </div>
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br>

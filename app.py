@@ -137,9 +137,45 @@ def vizualizacija():
 
 @app.route("/statistika", methods=["GET"])
 def statistika():
-    return render_template('statistika.html')
+    pokazi_mm = Popis_mm.query.order_by(Popis_mm.id).all()
+    return render_template('statistika.html', pokazi_mm = pokazi_mm, potrosnja_target=None)
 
+@app.route("/statistika/mm/<int:stat_id_mm>", methods=["GET"])
+def get_id_mm(stat_id_mm):
+    # print(f'Poslao si STAT_ID_MM: {stat_id_mm}')
+    pokazi_mm = Popis_mm.query.order_by(Popis_mm.id).all()
+    pokazi_ocitanja = Ocitanje_mm.query.order_by(Ocitanje_mm.id).all()
+    return render_template('statistika.html', pokazi_mm = pokazi_mm, stat_id_mm = stat_id_mm, pokazi_ocitanja = pokazi_ocitanja, potrosnja_target=None)    
 
+@app.route("/statistika/potrosnja/<int:stat_id_potrosnje>", methods=["GET"])
+def get_id_potrosnja(stat_id_potrosnje):
+    # print(f'Poslao si STAT_ID_POTROSNJE: {stat_id_potrosnje}')
+    pokazi_mm = Popis_mm.query.order_by(Popis_mm.id).all()
+    pokazi_ocitanja = Ocitanje_mm.query.order_by(Ocitanje_mm.id).all()
+    potrosnja_target = Ocitanje_mm.query.get(stat_id_potrosnje)
+
+    def izracunaj_postotak(VT, NT):
+        ukupno = VT + NT
+        if ukupno == 0:
+            return 0
+        return int((VT / ukupno) * 100)
+
+    distribucija = round(float((potrosnja_target.val_vt * 0.04) + (potrosnja_target.val_nt * 0.02)), 2)
+    prijenos = round(float((potrosnja_target.val_vt * 0.02) + (potrosnja_target.val_nt * 0.01)), 2)
+    ukupno = round(float(((potrosnja_target.val_vt * 0.09) + (potrosnja_target.val_nt * 0.04) + prijenos + distribucija) * 1.1), 2)
+    postotak = izracunaj_postotak(potrosnja_target.val_vt, potrosnja_target.val_nt)
+
+    return render_template(
+        'statistika.html', 
+        pokazi_mm = pokazi_mm, 
+        stat_id_potrosnje = stat_id_potrosnje, 
+        pokazi_ocitanja = pokazi_ocitanja, 
+        potrosnja_target = potrosnja_target,
+        distribucija = distribucija,
+        prijenos = prijenos,
+        ukupno = ukupno,
+        postotak = postotak
+    )       
 
 @app.route("/kalkulator", methods=["GET"])
 def kalkulator():

@@ -10,16 +10,16 @@ const ctx = document.getElementById('graf').getContext('2d');
 const graf = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['VT %', 'NT %'],
-      datasets: [{
-        data: [0, 100],
-        backgroundColor: ['#375E97', '#FFBB00'],
-      }]
+        labels: ['VT %', 'NT %'],
+        datasets: [{
+            data: [0, 100],
+            backgroundColor: ['#375E97', '#FFBB00'],
+        }]
     },
     options: {
-      cutout: '70%',
+        cutout: '70%',
     }
-  });
+});
 
 function izracunaj_distribuciju(VT_potrosnja, NT_potrosnja) {
     return (VT_potrosnja * VT_distribucija) + (NT_potrosnja * NT_distribucija);
@@ -34,12 +34,12 @@ function izracunaj_ukupno(VT_potrosnja, NT_potrosnja, distribucija, prijenos) {
     return ukupno;
 }
 
-function izracunaj_postotak(VT_potrosnja, NT_potrosnja) {  
+function izracunaj_postotak(VT_potrosnja, NT_potrosnja) {
     const total = VT_potrosnja + NT_potrosnja;
     if (total == 0) {
         return 0;
     }
-    return parseInt((VT_potrosnja / total) * 100);    
+    return parseInt((VT_potrosnja / total) * 100);
 }
 
 

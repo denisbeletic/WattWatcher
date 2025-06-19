@@ -5,7 +5,93 @@
 {% block body %}
 
 <div class="container mt-5">
-    <h1>Statistika</h1>
+    <h1 class="mb-0">Statistika</h1>
 </div>
+
+<div class="container mt-5">
+    <form action="{{ url_for('get_id_mm', stat_id_mm=0) }}" method="GET" id="form_statistika_mm" class="mt-5 mb-4 p-4 border rounded" style="max-width:750px; margin: auto; background-color: #f8f9fa;">  <!-- temporary inicijalizirano na 0, samo tako da bude defined -->
+        <label class="form-label">Mjerno mjesto:</label>
+        <select class="form-select mb-4" id="prikaz_statistike_mm_odabir" name="prikaz_statistike_mm_odabir" required>
+            <option value="">Odaberite mjerno mjesto...</option>
+            {% for mm in pokazi_mm %}
+                <option value="{{ mm.id }}">
+                    {{ mm.id }} - {{ mm.broj_omm }} - {{ mm.vlasnik }} - {{ mm.adresa }}
+                </option>
+            {% endfor %}
+        </select>
+        {% for mm in pokazi_mm %}
+            {% if mm.id == stat_id_mm %}
+                <div class="alert alert-info mt-4">
+                    <h5 class="alert-heading"><strong>Odabrano mjerno mjesto:</strong></h5>
+                    <hr>
+                    <p class="mb-1"><strong>ID:</strong> {{ mm.id }}</p>
+                    <p class="mb-1"><strong>Broj OMM-a:</strong> {{ mm.broj_omm }}</p>
+                    <p class="mb-1"><strong>Vlasnik:</strong> {{ mm.vlasnik }}</p>
+                    <p class="mb-0"><strong>Adresa:</strong> {{ mm.adresa }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="d-flex justify-content-end gap-3">
+            <button type="submit" class="btn btn-success"><i class="bi bi-search"></i> Dohvati MM</button>
+        </div>
+    </form>
+    <form action="{{ url_for('get_id_potrosnja', stat_id_potrosnje=0) }}" method="GET" id="form_statistika_potrosnja" class="mt-5 mb-4 p-4 border rounded" style="max-width:750px; margin: auto; background-color: #f8f9fa;">
+        <label class="form-label">Potrošnja:</label>
+        <select class="form-select mb-4" id="prikaz_statistike_potrošnje_odabir" name="prikaz_statistike_potrošnje_odabir" required>
+            <option value="">Odaberite potrošnju...</option>
+            {% for ocitanje in pokazi_ocitanja %}
+                {% if ocitanje.id_mm == stat_id_mm %}
+                    <option value="{{ ocitanje.id }}">
+                        ID: {{ ocitanje.id }}, mjesec: {{ ocitanje.mjesec }}., godina: {{ ocitanje.godina }}, VT: {{ ocitanje.val_vt }}, NT: {{ ocitanje.val_nt }}, ID MM-a: {{ ocitanje.id_mm }}
+                    </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        {% for ocitanje in pokazi_ocitanja %}
+            {% if ocitanje.id == stat_id_potrosnje %}
+                <div class="alert alert-warning mt-4">
+                    <h5 class="alert-heading"><strong>Odabrana potrošnja:</strong></h5>
+                    <hr>
+                    <p class="mb-1"><strong>ID:</strong> {{ ocitanje.id }}</p>
+                    <p class="mb-1"><strong>Mjesec:</strong> {{ ocitanje.mjesec }}.</p>
+                    <p class="mb-1"><strong>Godina:</strong> {{ ocitanje.godina }}.</p>
+                    <p class="mb-1"><strong>VT:</strong> {{ ocitanje.val_vt }}</p>
+                    <p class="mb-0"><strong>NT:</strong> {{ ocitanje.val_nt }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="d-flex justify-content-end gap-3">
+            <button type="submit" class="btn btn-success"><i class="bi bi-search"></i> Dohvati potrošnju</button>
+        </div>
+    </form>
+    <br>
+    <hr>
+    <br>
+
+    <div class="mb-4 mt-4">
+        <h4 class="mb-4"><strong>Cijena:</strong></h4>
+        <p class="mb-1">Cijena potrošnje VT: <strong>{{ potrosnja_target.val_vt }}</strong></p>
+        <p class="mb-1">Cijena potrošnje NT: <strong>{{ potrosnja_target.val_nt }}</strong></p>
+        <br>
+        <p class="mb-1">Cijena po kWh (VT): <strong>0.09€</strong></p>
+        <p class="mb-1">Cijena po kWh (NT): <strong>0.04€</strong></p>
+        <p class="mb-1">Distribucija: <strong><span id="distribucija_stat">{{ distribucija }}€</span></strong></p>
+        <p class="mb-1">Prijenos: <strong><span id="prijenos_stat">{{ prijenos }}€</span></strong></p>
+        <br>
+        <p class="mb-1">Porez: <strong>10%</strong></p>
+    </div>
+    
+    <h3>Ukupno: <span id="ukupno_stat">{{ ukupno }}€</span></h3>
+    <p class="text-center fs-5">Postotak potrošnje - VT/ukupno: <span id="postotak_potrosnje_stat">{{ postotak }}%</span></p>
+    <input type="hidden" id="postotak" value="{{ postotak }}">
+
+    <div class="d-flex justify-content-center">
+        <canvas id="graf"></canvas>
+    </div>
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br>
+</div>
+
+<script src="{{ url_for('static', filename='js/statistika.js') }}"></script>
 
 {% endblock %}

@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let pokazi_form_c = document.getElementById('hide_list_c')
     if (pokazi_form_c) {
-        pokazi_form_c.addEventListener('click', function() {
+        pokazi_form_c.addEventListener('click', function () {
             document.getElementById('list').style.display = 'none';
             document.getElementById('form_c').style.display = 'block';
         })
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let pokazi_form_d = document.getElementById('hide_list_d')
     if (pokazi_form_d) {
-        pokazi_form_d.addEventListener('click', function() {
+        pokazi_form_d.addEventListener('click', function () {
             document.getElementById('list').style.display = 'none';
             document.getElementById('form_d').style.display = 'block';
         })
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let pokazi_form_e = document.getElementById('hide_list_e')
     if (pokazi_form_e) {
-        pokazi_form_e.addEventListener('click', function() {
+        pokazi_form_e.addEventListener('click', function () {
             document.getElementById('list').style.display = 'none';
             document.getElementById('form_e').style.display = 'block';
         })
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let pokazi_list_from_c = document.getElementById('hide_form_c')
     if (pokazi_list_from_c) {
-        pokazi_list_from_c.addEventListener('click', function() {
+        pokazi_list_from_c.addEventListener('click', function () {
             document.getElementById('list').style.display = 'block';
             document.getElementById('form_c').style.display = 'none';
         })
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let pokazi_list_from_d = document.getElementById('hide_form_d')
     if (pokazi_list_from_d) {
-        pokazi_list_from_d.addEventListener('click', function() {
+        pokazi_list_from_d.addEventListener('click', function () {
             document.getElementById('list').style.display = 'block';
             document.getElementById('form_d').style.display = 'none';
         })
@@ -42,12 +42,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let pokazi_list_from_e = document.getElementById('hide_form_e')
     if (pokazi_list_from_e) {
-        pokazi_list_from_e.addEventListener('click', function() {
+        pokazi_list_from_e.addEventListener('click', function () {
             document.getElementById('list').style.display = 'block';
             document.getElementById('form_e').style.display = 'none';
         })
     }
-    
+
 
     let edit_dropdown = document.getElementById('uredivanje_mm_odabir');
     let edit_form = document.getElementById('edit_form');
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (edit_dropdown && edit_form) {
-        edit_dropdown.addEventListener('change', function() {
+        edit_dropdown.addEventListener('change', function () {
             if (edit_dropdown.value) {
                 let selected = edit_dropdown.options[edit_dropdown.selectedIndex];
                 document.getElementById('edit_id').value = selected.value;
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (hide_form_e) {
-        hide_form_e.addEventListener('click', function() {
+        hide_form_e.addEventListener('click', function () {
             hide_e_form();
         });
     }
