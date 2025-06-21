@@ -8,4 +8,40 @@
     <h1>Vizualizacija</h1>
 </div>
 
+<div class="container mt-5">
+    <form action="{{ url_for('vizualizacija_get', id_mm=0, godina=0) }}" method="GET" id="form_vizualizacija" class="mt-5 mb-4 p-4 border rounded" style="max-width:750px; margin: auto; background-color: #f8f9fa;">  <!-- temporary inicijalizirano na 0, samo tako da bude defined -->
+        <label class="form-label">Mjerno mjesto:</label>
+        <select class="form-select mb-4" id="prikaz_vizualizacije" name="prikaz_vizualizacije" required>
+            <option value="">Odaberite mjerno mjesto...</option>
+            {% for mm in pokazi_mm %}
+                <option value="{{ mm.id }}" {% if mm.id == prikaz_id %}selected{% endif %}>
+                    {{ mm.id }} - {{ mm.broj_omm }} - {{ mm.vlasnik }} - {{ mm.adresa }}
+                </option>
+            {% endfor %}
+        </select>
+        <label class="form-label">Godina:</label>
+        <input type="number" class="form-select mb-4" id="godina_vizualizacija" name="godina_vizualizacija" value="{{ prikaz_godina }}" required>
+        
+        <div class="d-flex justify-content-end gap-3">
+            <button type="submit" class="btn btn-success"><i class="bi bi-search"></i> Dohvati</button>
+        </div>
+    </form>
+</div>
+
+<br><br>
+
+<div class="d-flex justify-content-center" style="width: 100%; max-width: 1200px; margin: auto;">
+    <canvas id="graf_bar"></canvas>
+</div>
+
+<br><br><br><br><br><br><br>
+
+<div class="d-flex justify-content-center">
+    <canvas id="graf_bar"></canvas>
+</div>
+
+<div id="json-data" data-ocitanja='{{ targeted_ocitanja|tojson|safe }}'></div>
+
+<script src="{{ url_for('static', filename='js/vizualizacija.js') }}"></script>
+
 {% endblock %}

@@ -8,7 +8,7 @@ db = SQLAlchemy(app)
 
 class Popis_mm(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    broj_omm = db.Column(db.Integer, nullable = False)
+    broj_omm = db.Column(db.Integer, nullable = False, unique = True)
     vlasnik = db.Column(db.String(200))
     adresa = db.Column(db.String(200))
     postanski_broj = db.Column(db.Integer)
@@ -26,16 +26,28 @@ class Ocitanje_mm(db.Model):
     val_nt = db.Column(db.Float, nullable = False)
     id_mm = db.Column(db.Integer, db.ForeignKey("popis_mm.id"), nullable = False)   # popis_mm je ime tablice -> imena tablice su po defaultu lowercase verzije imena klase 
 
+    __table_args__ = (db.UniqueConstraint('id_mm', 'mjesec', 'godina', name='unique_id_mm_mjesec_godina'),)     # Unique constraint na tablici -> kombinacija id_mm, mjeseca i godine mora biti unique // radi nacina implementirane vizualizacije
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "mjesec": self.mjesec,
+            "godina": self.godina,
+            "val_vt": self.val_vt,
+            "val_nt": self.val_nt,
+            "id_mm": self.id_mm
+        }
+
     def __repr__(self):
         return '< ID: %r >' % self.id
 
-
+# ------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
 @app.route("/", methods=["GET"])
 def index():
     return render_template('index.html')
 
-
+# ------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
 @app.route("/mjerna_mjesta", methods=["GET", "POST"])
 def mjerna_mjesta():
@@ -47,10 +59,18 @@ def mjerna_mjesta():
             postanski_broj = int(request.form.get('postanski_broj'))
         )
 
-        db.session.add(novo_mm)
-        db.session.commit()
-        return redirect(url_for('mjerna_mjesta'))
-    
+        count = Popis_mm.query.filter_by(
+            broj_omm = novo_mm.broj_omm
+        ).count()
+
+        if count == 0:
+            db.session.add(novo_mm)
+            db.session.commit()
+            return redirect(url_for('mjerna_mjesta'))
+        
+        else:
+            return redirect(url_for('mjerna_mjesta'))
+
     else:
         pokazi_mm = Popis_mm.query.order_by(Popis_mm.id).all()
         return render_template('mjerna_mjesta.html', pokazi_mm = pokazi_mm)
@@ -58,8 +78,15 @@ def mjerna_mjesta():
 @app.route("/mjerna_mjesta/delete/", methods=["POST"])
 def delete_mm():
     id = request.form.get('uklanjanje_mm_odabir')
+
     mm_target = Popis_mm.query.get(id)
+    ocitanja_target = Ocitanje_mm.query.filter_by(id_mm = id).all()
+
+    for ocitanje in ocitanja_target:            # radi brisanja svih ocitanja vezanih s mjernim mjestom
+        db.session.delete(ocitanje)
+
     db.session.delete(mm_target)
+
     db.session.commit()
     return redirect(url_for('mjerna_mjesta'))
 
@@ -80,7 +107,7 @@ def edit_mm():
     db.session.commit()
     return redirect(url_for('mjerna_mjesta'))
 
-
+# ------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
 @app.route("/potrosnja", methods=["GET", "POST"])
 def potrosnja():
@@ -93,9 +120,19 @@ def potrosnja():
             id_mm = request.form.get('id_mm')
         )
 
-        db.session.add(novo_ocitanje)
-        db.session.commit()
-        return redirect(url_for('potrosnja'))
+        count = Ocitanje_mm.query.filter_by(
+            id_mm = novo_ocitanje.id_mm,
+            mjesec = novo_ocitanje.mjesec,
+            godina = novo_ocitanje.godina
+        ).count()
+
+        if count == 0:
+            db.session.add(novo_ocitanje)
+            db.session.commit()
+            return redirect(url_for('potrosnja'))
+        else:
+            # print("Record already exists!")
+            return redirect(url_for('potrosnja'))
 
     else:
         pokazi_mm = Popis_mm.query.order_by(Popis_mm.id).all()
@@ -127,25 +164,19 @@ def edit_potrosnja():
     db.session.commit()
     return redirect(url_for('potrosnja'))    
 
-
-
-@app.route("/vizualizacija", methods=["GET"])
-def vizualizacija():
-    return render_template('vizualizacija.html')
-
-
+# ------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
 @app.route("/statistika", methods=["GET"])
 def statistika():
     pokazi_mm = Popis_mm.query.order_by(Popis_mm.id).all()
-    return render_template('statistika.html', pokazi_mm = pokazi_mm, potrosnja_target=None)
+    return render_template('statistika.html', pokazi_mm = pokazi_mm, potrosnja_target = None)
 
 @app.route("/statistika/mm/<int:stat_id_mm>", methods=["GET"])
 def get_id_mm(stat_id_mm):
     # print(f'Poslao si STAT_ID_MM: {stat_id_mm}')
     pokazi_mm = Popis_mm.query.order_by(Popis_mm.id).all()
     pokazi_ocitanja = Ocitanje_mm.query.order_by(Ocitanje_mm.id).all()
-    return render_template('statistika.html', pokazi_mm = pokazi_mm, stat_id_mm = stat_id_mm, pokazi_ocitanja = pokazi_ocitanja, potrosnja_target=None)    
+    return render_template('statistika.html', pokazi_mm = pokazi_mm, stat_id_mm = stat_id_mm, pokazi_ocitanja = pokazi_ocitanja, potrosnja_target = None)    
 
 @app.route("/statistika/potrosnja/<int:stat_id_potrosnje>", methods=["GET"])
 def get_id_potrosnja(stat_id_potrosnje):
@@ -177,11 +208,43 @@ def get_id_potrosnja(stat_id_potrosnje):
         postotak = postotak
     )       
 
+# ------------------------------------------------------------------------------------------------------------------------------------------------------- #
+
+@app.route("/vizualizacija", methods=["GET"])
+def vizualizacija():
+    targeted_ocitanja = []
+    pokazi_mm = Popis_mm.query.order_by(Popis_mm.id).all()
+    pokazi_ocitanja = Ocitanje_mm.query.order_by(Ocitanje_mm.id).all()
+    return render_template('vizualizacija.html', pokazi_mm = pokazi_mm, pokazi_ocitanja = pokazi_ocitanja, targeted_ocitanja = targeted_ocitanja)
+
+@app.route("/vizualizacija/<int:id_mm>/<int:godina>", methods=["GET"])
+def vizualizacija_get(id_mm, godina):
+
+    targeted_ocitanja = Ocitanje_mm.query.filter(
+        Ocitanje_mm.id_mm == id_mm,
+        Ocitanje_mm.godina == godina
+    ).all()
+
+    targeted_ocitanja = [o.to_dict() for o in targeted_ocitanja]
+
+    pokazi_mm = Popis_mm.query.order_by(Popis_mm.id).all()
+    pokazi_ocitanja = Ocitanje_mm.query.order_by(Ocitanje_mm.id).all()
+    return render_template(
+        'vizualizacija.html',
+        pokazi_mm = pokazi_mm,
+        pokazi_ocitanja = pokazi_ocitanja,
+        targeted_ocitanja = targeted_ocitanja,
+        prikaz_id = id_mm,
+        prikaz_godina = godina
+        )
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------------- #
+
 @app.route("/kalkulator", methods=["GET"])
 def kalkulator():
     return render_template('kalkulator.html')
 
-
+# ------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
 if __name__ == "__main__":
     with app.app_context():

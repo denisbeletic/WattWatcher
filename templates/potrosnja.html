@@ -4,7 +4,6 @@
 
 {% block body %}
 
-
 <div id="potrosnje">
     <div class="container mt-5">
         <h1 class="mb-2 text-center">Potrošnja</h1>
@@ -52,13 +51,17 @@
                 <input type="number" class="form-control" id="godina" name="godina" placeholder="Unesite godinu" required>
             </div>
             <br>
+            <div class="alert alert-danger text-center">
+                Svako OMM može imati samo jednu potrošnju mjesečno po godini!
+            </div>
+            <br>
             <div class="d-flex justify-content-end gap-3">
                 <button type="submit" class="btn btn-success"><i class="bi bi-file-earmark-plus"></i> - Unesi potrošnju</button>
             </div>
         </div>
     </form>
 
-    <div class="container mt-5"  id="">
+    <div class="container mt-5">
         <div class="mt-5">
             <table class="table table-bordered table-hover text-center">
                 <tr class="table-primary">
@@ -80,8 +83,8 @@
             </table>
         </div>
     </div>
-    
-    <div class="container mt-5"  id="">
+   
+    <div class="container mt-5">
         <div class="mt-5">
             <table class="table table-bordered table-hover text-center">
                 <tr class="table-primary">

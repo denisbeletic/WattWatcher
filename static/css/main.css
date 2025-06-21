@@ -15,7 +15,12 @@ body {
     background-color: #20447d;
   }
 
-  #graf {
+  #graf_doughnut {
     width: 200px !important;
     height: 200px !important;
+  }
+
+  #graf_bar {
+    width: 1200px !important;
+    height: 600px !important;
   }

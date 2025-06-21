@@ -6,20 +6,26 @@ const VT_prijenos = 0.02;      // €/kWh
 const NT_prijenos = 0.01;      // €/kWh
 const porez = 0.1;             // %
 
-const ctx = document.getElementById('graf').getContext('2d');
-const graf = new Chart(ctx, {
+let data = {
+    labels: ['VT %', 'NT %'],
+    datasets: [{
+        data: [0, 100],
+        backgroundColor: ['#375E97', '#FFBB00'],
+    }]
+}
+
+const ctx = document.getElementById('graf_doughnut');
+
+const config = {
     type: 'doughnut',
-    data: {
-        labels: ['VT %', 'NT %'],
-        datasets: [{
-            data: [0, 100],
-            backgroundColor: ['#375E97', '#FFBB00'],
-        }]
-    },
     options: {
         cutout: '70%',
-    }
-});
+    },
+    data : data
+}
+
+const graf = new Chart(ctx, config)
+
 
 function izracunaj_distribuciju(VT_potrosnja, NT_potrosnja) {
     return (VT_potrosnja * VT_distribucija) + (NT_potrosnja * NT_distribucija);

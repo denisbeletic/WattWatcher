@@ -1,17 +1,23 @@
-const ctx = document.getElementById('graf').getContext('2d');
-const graf = new Chart(ctx, {
+let data = {
+    labels: ['VT %', 'NT %'],
+    datasets: [{
+        data: [0, 100],
+        backgroundColor: ['#375E97', '#FFBB00'],
+    }]
+}
+
+const ctx = document.getElementById('graf_doughnut');
+
+const config = {
     type: 'doughnut',
-    data: {
-        labels: ['VT %', 'NT %'],
-        datasets: [{
-            data: [0, 100],
-            backgroundColor: ['#375E97', '#FFBB00'],
-        }]
-    },
     options: {
         cutout: '70%',
-    }
-});
+    },
+    data : data
+}
+
+const graf = new Chart(ctx, config)
+
 
 let form_mm = document.getElementById('form_statistika_mm');
 let select_mm = document.getElementById('prikaz_statistike_mm_odabir');
