@@ -75,7 +75,7 @@ def mjerna_mjesta():
         pokazi_mm = Popis_mm.query.order_by(Popis_mm.id).all()
         return render_template('mjerna_mjesta.html', pokazi_mm = pokazi_mm)
 
-@app.route("/mjerna_mjesta/delete/", methods=["POST"])
+@app.route("/mjerna_mjesta/delete/", methods=["POST"])      # sve radim kroz forme, koje dopustaju samo GET i POST, inace bi DELETE postavljao
 def delete_mm():
     id = request.form.get('uklanjanje_mm_odabir')
 
@@ -249,4 +249,4 @@ def kalkulator():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(port=8080, debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=True)
